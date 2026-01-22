@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <title>CSS REsponsive Design</title>
+
+    <style>
+       
+       .main-section{
+        border: 2px solid;
+        display: flex;
+        justify-content: space-around;
+        padding: 50px;
+       }
+
+       .box{
+        border: 2px solid red;
+       }
+
+
+       @media screen and (max-width: 600px)
+       {
+            .main-section{
+                flex-direction: column;
+            }
+
+            
+       }
+
+
+    </style>
+</head>
+<body>
+
+    <section class="main-section">
+        <div class="box">
+            <h1>left section</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque, impedit. Aliquam provident quibusdam expedita deleniti.</p>
+            <button>read more</button>
+        </div>
+
+
+        <div class="box">
+            <h1>Right section</h1>
+            <ul>
+                <li>home</li>
+                <li>Skils</li>
+                <li>Career</li>
+                <li>Settings</li>
+            </ul>
+            <button>Information</button>
+        </div>
+    </section>
+   
+    
+</body>
+</html>

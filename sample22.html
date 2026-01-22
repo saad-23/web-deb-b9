@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Login Page</title>
+    <link rel="stylesheet" href="mycustomstyle.css">
+</head>
+<body>
+
+    <div class="login-container">
+        <div id="error-message" class="error-box"></div>
+
+        <form class="login-form" id="loginForm">
+            <h2>Welcome Back</h2>
+            <p>Please enter your credentials to login.</p>
+            
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter username" autocomplete="off">
+            </div>
+            
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter password">
+            </div>
+            
+            <button type="submit" class="login-btn" id="submitBtn">Login</button>
+            
+            <div class="form-footer">
+                <a href="#">Forgot password?</a>
+                <span>Don't have an account? <a href="#">Sign up</a></span>
+            </div>
+        </form>
+    </div>
+
+   <script>
+
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+    // 1. Prevent the page from refreshing
+    e.preventDefault();
+
+    // 2. Get input values
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const errorDisplay = document.getElementById('error-message');
+
+    // 3. Reset error state
+    errorDisplay.style.display = 'none';
+    errorDisplay.textContent = '';
+
+    // 4. Validation Rules
+    if (username === "") {
+        displayError("Username is required");
+        return;
+    }
+
+    if (password === "") {
+        displayError("Password is required");
+        return;
+    }
+
+    if (password.length < 6) {
+        displayError("Password must be at least 6 characters");
+        return;
+    }
+
+    // 5. Success Logic
+    alert("Login Successful! Processing data...");
+    // Here you would typically send data to a server using fetch()
+});
+
+function displayError(msg) {
+    const errorDisplay = document.getElementById('error-message');
+    errorDisplay.textContent = msg;
+    errorDisplay.style.display = 'block';
+    
+    // Optional: Add a small shake animation or scroll to top
+    errorDisplay.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+   </script>
+</body>
+</html>

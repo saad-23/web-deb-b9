@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Quiz App</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+
+        .quiz-container {
+            background-color: #ffffff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 2.2em;
+        }
+
+        .question-section {
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .question-text {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #34495e;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option-button {
+            background-color: #ecf0f1;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            padding: 15px 20px;
+            font-size: 1.1em;
+            color: #34495e;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            outline: none;
+            position: relative;
+        }
+
+        .option-button:hover {
+            background-color: #dfe6e9;
+            border-color: #95a5a6;
+        }
+
+        .option-button.selected {
+            background-color: #3498db;
+            color: #ffffff;
+            border-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(41, 128, 185, 0.3);
+        }
+
+        .option-button.correct {
+            background-color: #2ecc71;
+            color: #ffffff;
+            border-color: #27ae60;
+        }
+
+        .option-button.incorrect {
+            background-color: #e74c3c;
+            color: #ffffff;
+            border-color: #c0392b;
+        }
+
+        .navigation-buttons {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            gap: 20px; /* Space between buttons */
+        }
+
+        .action-button {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            flex-grow: 1; /* Allow buttons to grow and fill space */
+        }
+
+        .action-button:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+        }
+
+        .action-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        #submitButton {
+            background-color: #3498db;
+        }
+
+        #submitButton:hover {
+            background-color: #2980b9;
+        }
+
+        #restartButton {
+            background-color: #e67e22;
+            display: none; /* Hidden by default */
+        }
+
+        #restartButton:hover {
+            background-color: #d35400;
+        }
+
+        .results-section {
+            margin-top: 40px;
+            font-size: 1.4em;
+            color: #2c3e50;
+            font-weight: bold;
+            display: none; /* Hidden by default */
+        }
+
+        .score-text {
+            margin-bottom: 15px;
+        }
+
+        .feedback-text {
+            font-size: 0.9em;
+            color: #7f8c8d;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .quiz-container {
+                margin: 20px;
+                padding: 25px 30px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            .question-text {
+                font-size: 1.2em;
+            }
+            .option-button {
+                padding: 12px 15px;
+                font-size: 1em;
+            }
+            .action-button {
+                padding: 12px 20px;
+                font-size: 1em;
+            }
+            .navigation-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Quiz App</h1>
+        <div class="question-section">
+            <p class="question-text" id="question-text">Question goes here?</p>
+            <div class="options-container" id="options-container">
+                <!-- Options will be loaded here by JavaScript -->
+            </div>
+        </div>
+        <div class="navigation-buttons">
+            <button class="action-button" id="prevButton" disabled>Previous</button>
+            <button class="action-button" id="nextButton">Next</button>
+            <button class="action-button" id="submitButton">Submit Quiz</button>
+            <button class="action-button" id="restartButton">Restart Quiz</button>
+        </div>
+        <div class="results-section" id="results-section">
+            <p class="score-text">Your score: <span id="score">0</span> / <span id="total-questions">0</span></p>
+            <p class="feedback-text" id="feedback-text"></p>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "What is the capital of France?",
+                options: ["Berlin", "Madrid", "Paris", "Rome"],
+                answer: "Paris"
+            },
+            {
+                question: "Which planet is known as the Red Planet?",
+                options: ["Earth", "Mars", "Jupiter", "Venus"],
+                answer: "Mars"
+            },
+            {
+                question: "What is 2 + 2?",
+                options: ["3", "4", "5", "6"],
+                answer: "4"
+            },
+            {
+                question: "Who painted the Mona Lisa?",
+                options: ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Claude Monet"],
+                answer: "Leonardo da Vinci"
+            },
+            {
+                question: "What is the largest ocean on Earth?",
+                options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
+                answer: "Pacific Ocean"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = new Array(questions.length).fill(null); // To store user's selected option index
+
+        const questionTextElement = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        const submitButton = document.getElementById('submitButton');
+        const restartButton = document.getElementById('restartButton');
+        const resultsSection = document.getElementById('results-section');
+        const scoreElement = document.getElementById('score');
+        const totalQuestionsElement = document.getElementById('total-questions');
+        const feedbackTextElement = document.getElementById('feedback-text');
+
+        function loadQuestion() {
+            const currentQuestion = questions[currentQuestionIndex];
+            questionTextElement.textContent = `Q${currentQuestionIndex + 1}: ${currentQuestion.question}`;
+            optionsContainer.innerHTML = ''; // Clear previous options
+
+            currentQuestion.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.classList.add('option-button');
+                button.textContent = option;
+                button.onclick = () => selectOption(index);
+                if (userAnswers[currentQuestionIndex] === index) {
+                    button.classList.add('selected');
+                }
+                optionsContainer.appendChild(button);
+            });
+
+            updateNavigationButtons();
+        }
+
+        function selectOption(selectedIndex) {
+            userAnswers[currentQuestionIndex] = selectedIndex;
+            const optionButtons = optionsContainer.querySelectorAll('.option-button');
+            optionButtons.forEach((button, index) => {
+                if (index === selectedIndex) {
+                    button.classList.add('selected');
+                } else {
+                    button.classList.remove('selected');
+                }
+            });
+        }
+
+        function updateNavigationButtons() {
+            prevButton.disabled = currentQuestionIndex === 0;
+            nextButton.disabled = currentQuestionIndex === questions.length - 1;
+            submitButton.style.display = currentQuestionIndex === questions.length - 1 ? 'block' : 'none';
+            if(submitButton.style.display === 'block') {
+                nextButton.style.display = 'none'; // Hide next button if submit is visible
+            } else {
+                nextButton.style.display = 'block';
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        }
+
+        function submitQuiz() {
+            score = 0;
+            questions.forEach((q, qIndex) => {
+                const selectedOptionIndex = userAnswers[qIndex];
+                if (selectedOptionIndex !== null && q.options[selectedOptionIndex] === q.answer) {
+                    score++;
+                }
+            });
+            showResults();
+        }
+
+        function showResults() {
+            questionTextElement.style.display = 'none';
+            optionsContainer.style.display = 'none';
+            prevButton.style.display = 'none';
+            nextButton.style.display = 'none';
+            submitButton.style.display = 'none';
+
+            resultsSection.style.display = 'block';
+            scoreElement.textContent = score;
+            totalQuestionsElement.textContent = questions.length;
+            restartButton.style.display = 'block';
+
+            if (score === questions.length) {
+                feedbackTextElement.textContent = "Excellent! You got all answers correct!";
+                feedbackTextElement.style.color = "#2ecc71";
+            } else if (score > questions.length / 2) {
+                feedbackTextElement.textContent = "Good job! You did well.";
+                feedbackTextElement.style.color = "#3498db";
+            } else {
+                feedbackTextElement.textContent = "Keep practicing! You'll get there.";
+                feedbackTextElement.style.color = "#e67e22";
+            }
+
+            // Show correct/incorrect for each question if user wants to review
+            // For now, let's just highlight the overall result
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers.fill(null);
+
+            questionTextElement.style.display = 'block';
+            optionsContainer.style.display = 'flex';
+            resultsSection.style.display = 'none';
+            restartButton.style.display = 'none';
+
+            loadQuestion();
+        }
+
+        // Event Listeners
+        nextButton.addEventListener('click', nextQuestion);
+        prevButton.addEventListener('click', prevQuestion);
+        submitButton.addEventListener('click', submitQuiz);
+        restartButton.addEventListener('click', restartQuiz);
+
+        // Initial load
+        loadQuestion();
+    </script>
+</body>
+</html>

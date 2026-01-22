@@ -1,0 +1,125 @@
+.rooms-section {
+    background: linear-gradient(180deg, #f0f2f5 0%, #e0e2e5 100%); /* Light gradient background */
+    border-radius: 20px;
+    padding: 20px;
+    width: 350px; /* Adjust based on image estimation */
+    font-family: Arial, sans-serif;
+}
+
+.rooms-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.rooms-header h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+.rooms-header .fa-info-circle {
+    color: #888;
+    font-size: 1.2rem;
+}
+
+.room-list {
+    margin-bottom: 20px;
+}
+
+.room-item {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.room-item:hover {
+    background-color: #f0f0f0;
+}
+
+.room-item.active {
+    background-color: #e6f2ff; /* Light blue for active item */
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.1);
+}
+
+.room-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+    font-size: 1.1rem;
+    color: #666;
+}
+
+.room-item.active .room-icon {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.room-details {
+    flex-grow: 1;
+}
+
+.room-details h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+    color: #333;
+}
+
+.room-details p {
+    font-size: 0.85rem;
+    color: #888;
+    margin: 0;
+}
+
+.room-arrow .fa-chevron-right {
+    color: #ccc;
+    font-size: 0.9rem;
+}
+
+.add-room-btn {
+    width: 100%;
+    background-color: #1a202c; /* Dark background for the button */
+    color: #fff;
+    border-radius: 15px;
+    padding: 12px 0;
+    font-size: 1rem;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+}
+
+.add-room-btn:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+.add-room-btn .fa-plus {
+    margin-right: 10px;
+}
+
+body {
+    background-color: #f8f9fa; /* Light background for the whole page */
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}

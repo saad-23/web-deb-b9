@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Calculator</title>
+    <style>
+        body {
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden; /* Prevent scrollbar from transform effects */
+        }
+        .calculator {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            width: 320px;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            gap: 15px; /* Consistent spacing */
+        }
+        .calculator:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        .display {
+            width: calc(100% - 20px); /* Adjust for padding */
+            min-height: 70px;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-align: right;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            background: #ecf0f3;
+            color: #333333;
+            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.08), inset -3px -3px 7px #ffffff;
+            outline: none;
+            letter-spacing: 1px;
+            font-weight: 500;
+            overflow-x: auto; /* Allow horizontal scrolling for long numbers */
+            white-space: nowrap; /* Prevent wrapping */
+            -webkit-appearance: none; /* Remove default styling for iOS */
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px; /* Consistent spacing */
+        }
+        button {
+            padding: 20px 0;
+            font-size: 1.3em;
+            border: none;
+            border-radius: 10px;
+            background: #e0e5ec;
+            color: #555555;
+            cursor: pointer;
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1), -5px -5px 10px #ffffff;
+            transition: all 0.2s ease-in-out;
+            outline: none;
+            position: relative;
+            font-weight: 600;
+            user-select: none; /* Prevent text selection */
+        }
+        button:hover {
+            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1), inset -3px -3px 7px #ffffff;
+            color: #007bff;
+        }
+        button:active {
+            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1), inset -3px -3px 7px #ffffff;
+            transform: scale(0.98);
+            color: #0056b3;
+        }
+        button.operator {
+            background: #eebbc3; /* Lighter shade */
+            color: #d11e3b;
+            font-weight: bold;
+        }
+        button.operator:hover {
+            background: #f8d3d9;
+            color: #b31a30;
+        }
+        button.equal {
+            background: #4CAF50;
+            color: #ffffff;
+            font-weight: bold;
+            grid-column: span 2; /* Make equal button span 2 columns */
+        }
+        button.equal:hover {
+            background: #45a049;
+        }
+        button.clear {
+            background: #f44336;
+            color: #ffffff;
+            font-weight: bold;
+            grid-column: span 2; /* Make clear button span 2 columns */
+        }
+        button.clear:hover {
+            background: #da190b;
+        }
+        /* Media Queries for responsiveness */
+        @media (max-width: 400px) {
+            .calculator {
+                width: 95vw;
+                padding: 20px;
+            }
+            .display {
+                font-size: 2em;
+                min-height: 60px;
+            }
+            button {
+                font-size: 1.1em;
+                padding: 15px 0;
+            }
+        }
+    
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" class="display" id="display" disabled>
+        <div class="buttons">
+            <button onclick="appendValue('7')">7</button>
+            <button onclick="appendValue('8')">8</button>
+            <button onclick="appendValue('9')">9</button>
+            <button class="operator" onclick="appendValue('/')">÷</button>
+
+            <button onclick="appendValue('4')">4</button>
+            <button onclick="appendValue('5')">5</button>
+            <button onclick="appendValue('6')">6</button>
+            <button class="operator" onclick="appendValue('*')">×</button>
+
+            <button onclick="appendValue('1')">1</button>
+            <button onclick="appendValue('2')">2</button>
+            <button onclick="appendValue('3')">3</button>
+            <button class="operator" onclick="appendValue('-')">−</button>
+
+            <button onclick="appendValue('0')">0</button>
+            <button onclick="appendValue('.')">.</button>
+            <button class="operator" onclick="backspace()">⌫</button>
+            <button class="operator" onclick="appendValue('+')">+</button>
+
+            <button class="equal" onclick="calculate()">=</button>
+            <button class="clear" onclick="clearDisplay()">C</button>
+        </div>
+    </div>
+    <script>
+        const display = document.getElementById('display');
+        function appendValue(val) {
+            // Prevent multiple decimals in a number
+            if (val === '.') {
+                const parts = display.value.split(/[-+*/]/);
+                if (parts[parts.length - 1].includes('.')) return;
+            }
+            // Prevent two operators in a row
+            if ('+-*/'.includes(val)) {
+                if (display.value === '' && val !== '-') return;
+                if ('+-*/'.includes(display.value.slice(-1))) {
+                    display.value = display.value.slice(0, -1) + val;
+                    return;
+                }
+            }
+            display.value += val;
+        }
+        function clearDisplay() {
+            display.value = '';
+        }
+        function backspace() {
+            display.value = display.value.slice(0, -1);
+        }
+        function calculate() {
+            try {
+                let result = eval(display.value.replace(/÷/g, '/').replace(/×/g, '*'));
+                if (result === undefined || isNaN(result)) {
+                    display.value = '';
+                } else {
+                    display.value = result;
+                }
+            } catch {
+                display.value = 'Error';
+            }
+        }
+        // Keyboard support
+        document.addEventListener('keydown', function(e) {
+            if ((e.key >= '0' && e.key <= '9') || '+-*/.'.includes(e.key)) {
+                appendValue(e.key);
+            } else if (e.key === 'Enter' || e.key === '=') {
+                calculate();
+            } else if (e.key === 'Backspace') {
+                backspace();
+            } else if (e.key === 'Delete' || e.key.toLowerCase() === 'c') {
+                clearDisplay();
+            }
+        });
+    </script>
+</body>
+</html>

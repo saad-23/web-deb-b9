@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Two Section Interactive Page</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+    }
+    header {
+      padding: 20px;
+      text-align: center;
+      background: #4a90e2;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 20px;
+    }
+    .section {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    button {
+      background: #4a90e2;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background: #357ac7;
+    }
+    #toggleText {
+      display: none;
+      margin-top: 10px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <header>Simple Interactive Webpage</header>
+
+  <div class="container">
+
+    <div class="section">
+      <h2>Section 1</h2>
+      <img src="https://via.placeholder.com/400x200" alt="Sample Image" style="width:100%; border-radius:10px; margin-bottom:10px;" />
+      <p>This is the first section. Click the button below to reveal hidden text.</p>
+      <button onclick="toggleContent()">Show / Hide Details</button>
+      <p id="toggleText">Here is some hidden interactive content from Section 1!</p>
+    </div>
+
+    <div class="section">
+      <h2>Section 2</h2>
+      <p>Type something below and it will appear live:</p>
+      <input type="text" id="liveInput" placeholder="Type here..." oninput="showLiveText()" />
+      <p><strong>You typed:</strong> <span id="liveOutput"></span></p>
+    </div>
+
+  </div>
+
+  <script>
+    function toggleContent() {
+      const text = document.getElementById("toggleText");
+      text.style.display = text.style.display === "none" ? "block" : "none";
+    }
+
+    function showLiveText() {
+      const input = document.getElementById("liveInput").value;
+      document.getElementById("liveOutput").textContent = input;
+    }
+  </script>
+</body>
+</html>
